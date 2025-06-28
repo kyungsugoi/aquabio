@@ -470,23 +470,7 @@
                     this.resetView();
                 });
                 
-                // // Add touch events for zoom controls
-                // this.zoomInBtn.addEventListener('touchend', (e) => {
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                //     this.zoomIn();
-                // });
-                // this.zoomOutBtn.addEventListener('touchend', (e) => {
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                //     this.zoomOut();
-                // });
-                // this.resetBtn.addEventListener('touchend', (e) => {
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                //     this.resetView();
-                // });
-                
+
                 // Mouse events for panning
                 this.imageContainer.addEventListener('mousedown', (e) => this.startDrag(e));
                 this.imageContainer.addEventListener('mousemove', (e) => this.drag(e));
@@ -604,23 +588,12 @@
             
             constrainPosition() {
                 const containerRect = this.imageContainer.getBoundingClientRect();
+                // When zoomed, constrain to keep image content visible
+                const maxTranslateX = (containerRect.width * (this.scale - 1)) / 2;
+                const maxTranslateY = (containerRect.height * (this.scale - 1)) / 2;
                 
-                if (this.scale <= 1) {
-                    // At default zoom, allow free dragging within reasonable bounds
-                    const maxTranslateX = containerRect.width * 0.3; // Allow 30% of container width
-                    const maxTranslateY = containerRect.height * 0.3; // Allow 30% of container height
-                    
-                    this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
-                    this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
-                } else {
-                    // When zoomed, constrain to keep image content visible
-                    const maxTranslateX = (containerRect.width * (this.scale - 1)) / 2;
-                    const maxTranslateY = (containerRect.height * (this.scale - 1)) / 2;
-                    
-                    this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
-                    this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
-                }
-                
+                this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
+                this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
                 this.updateTransform();
             }
             
@@ -670,13 +643,7 @@
                         this.closePopup();
                     }
                 });
-                
-                // Auto-close after 8 seconds
-                setTimeout(() => {
-                    if (this.activePopup === overlay) {
-                        this.closePopup();
-                    }
-                }, 8000);
+
             }
             closePopup() {
                 if (this.activePopup) {
