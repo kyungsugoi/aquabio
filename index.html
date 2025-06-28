@@ -660,6 +660,20 @@
                     }
                 });
 
+
+                // Close button functionality for mobile
+                popup.querySelector('.close-btn').addEventListener('touchend', (e) => {
+                    e.stopPropagation();
+                    this.closePopup();
+                });
+                
+                // Close on overlay click for mobile
+                overlay.addEventListener('touchend', (e) => {
+                    if (e.target === overlay) {
+                        this.closePopup();
+                    }
+                });
+
             }
             closePopup() {
                 if (this.activePopup) {
