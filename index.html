@@ -470,23 +470,22 @@
                     this.resetView();
                 });
                 
-                // Add touch events for zoom controls
-                this.zoomInBtn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.zoomIn();
-                });
-                this.zoomOutBtn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.zoomOut();
-                });
-                this.resetBtn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.resetView();
-                });
-                
+                // // Add touch events for zoom controls
+                // this.zoomInBtn.addEventListener('touchend', (e) => {
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                //     this.zoomIn();
+                // });
+                // this.zoomOutBtn.addEventListener('touchend', (e) => {
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                //     this.zoomOut();
+                // });
+                // this.resetBtn.addEventListener('touchend', (e) => {
+                //     e.preventDefault();
+                //     e.stopPropagation();
+                //     this.resetView();
+                // });
                 
                 // Mouse events for panning
                 this.imageContainer.addEventListener('mousedown', (e) => this.startDrag(e));
