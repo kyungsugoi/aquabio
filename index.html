@@ -457,9 +457,36 @@
             
             init() {
                 // Zoom controls
-                this.zoomInBtn.addEventListener('click', () => this.zoomIn());
-                this.zoomOutBtn.addEventListener('click', () => this.zoomOut());
-                this.resetBtn.addEventListener('click', () => this.resetView());
+                this.zoomInBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.zoomIn();
+                });
+                this.zoomOutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.zoomOut();
+                });
+                this.resetBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.resetView();
+                });
+                
+                // Add touch events for zoom controls
+                this.zoomInBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.zoomIn();
+                });
+                this.zoomOutBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.zoomOut();
+                });
+                this.resetBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.resetView();
+                });
+                
                 
                 // Mouse events for panning
                 this.imageContainer.addEventListener('mousedown', (e) => this.startDrag(e));
@@ -468,8 +495,9 @@
                 this.imageContainer.addEventListener('mouseleave', () => this.endDrag());
                 
                 // Touch events for mobile
-                this.imageContainer.addEventListener('touchstart', (e) => this.startDrag(e));
-                this.imageContainer.addEventListener('touchmove', (e) => this.drag(e));
+                // { passive: false } to ensure preventDefault works correctly
+                this.imageContainer.addEventListener('touchstart', (e) => this.startDrag(e), { passive: false});
+                this.imageContainer.addEventListener('touchmove', (e) => this.drag(e), { passive: false });
                 this.imageContainer.addEventListener('touchend', () => this.endDrag());
                 
                 // Wheel zoom
@@ -486,7 +514,14 @@
             initHotspots() {
                 const hotspots = this.imageContainer.querySelectorAll('.hotspot');
                 hotspots.forEach(hotspot => {
+                    // Use both click and touchend for better mobile compatibility
                     hotspot.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.showPopup(hotspot);
+                    });
+                    
+                    hotspot.addEventListener('touchend', (e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         this.showPopup(hotspot);
                     });
@@ -530,27 +565,28 @@
             }
             
             startDrag(e) {
-                if (this.scale <= 1) return;
+                // Prevent default touch behaviors that might interfere
+                e.preventDefault();
                 
                 this.isDragging = true;
                 this.imageContainer.style.cursor = 'grabbing';
                 
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
+                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
                 
                 this.startX = clientX;
                 this.startY = clientY;
                 this.initialTranslateX = this.translateX;
                 this.initialTranslateY = this.translateY;
-                
-                e.preventDefault();
             }
             
             drag(e) {
                 if (!this.isDragging) return;
+                // Prevent default touch behaviors
+                e.preventDefault();
                 
-                const clientX = e.clientX || e.touches[0].clientX;
-                const clientY = e.clientY || e.touches[0].clientY;
+                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
                 
                 const deltaX = clientX - this.startX;
                 const deltaY = clientY - this.startY;
@@ -559,7 +595,6 @@
                 this.translateY = this.initialTranslateY + deltaY;
                 
                 this.updateTransform();
-                e.preventDefault();
             }
             
             endDrag() {
@@ -570,11 +605,22 @@
             
             constrainPosition() {
                 const containerRect = this.imageContainer.getBoundingClientRect();
-                const maxTranslateX = (containerRect.width * (this.scale - 1)) / 2;
-                const maxTranslateY = (containerRect.height * (this.scale - 1)) / 2;
                 
-                this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
-                this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
+                if (this.scale <= 1) {
+                    // At default zoom, allow free dragging within reasonable bounds
+                    const maxTranslateX = containerRect.width * 0.3; // Allow 30% of container width
+                    const maxTranslateY = containerRect.height * 0.3; // Allow 30% of container height
+                    
+                    this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
+                    this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
+                } else {
+                    // When zoomed, constrain to keep image content visible
+                    const maxTranslateX = (containerRect.width * (this.scale - 1)) / 2;
+                    const maxTranslateY = (containerRect.height * (this.scale - 1)) / 2;
+                    
+                    this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
+                    this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
+                }
                 
                 this.updateTransform();
             }
@@ -587,7 +633,7 @@
                 });
             }
             
- showPopup(hotspot) {
+             showPopup(hotspot) {
                 this.closePopup();
                 
                 const title = hotspot.getAttribute('data-title');
@@ -633,7 +679,6 @@
                     }
                 }, 8000);
             }
-            
             closePopup() {
                 if (this.activePopup) {
                     this.activePopup.classList.remove('show');
@@ -645,13 +690,11 @@
                     }, 300);
                 }
             }
-            
             handleOutsideClick(e) {
                 if (!e.target.closest('.popup') && !e.target.closest('.hotspot') && !e.target.closest('.zoom-controls') && !e.target.closest('.popup-overlay')) {
                     this.closePopup();
                 }
             }
-            
             handleKeyDown(e) {
                 if (e.key === 'Escape') {
                     this.closePopup();
@@ -659,10 +702,11 @@
             }
         }
         
-        // Initialize the tabbed viewer when the page loads
+        // initialize tabs when page is loaded
         document.addEventListener('DOMContentLoaded', () => {
             new TabbedMuralViewer();
         });
+
     </script>
 </body>
 </html>
