@@ -5,23 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aqua Bio Murals</title>
+    <link rel="icon" href="./270x250LogoNoTxt.jpg" type="image/x-icon">
     <style>
+        
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to top, #a6dcee, #b6e3f2, #c7ebf6, #d6f2fb, #e6f9ff);
-            height:100vh;
-            padding-left: 20px;
-            padding-right: 20px;
+            height: 100vh;
+            padding: 0 20px;
+            position: relative;
             display: flex;
             justify-content: center;
             margin: 0;
-            position: relative;
         }
+
         .container {
             max-width: 900px;
             width: 100%;
-            margin-top:50px;
+            margin-top: 50px;
         }
+
         h1 {
             text-align: left;
             color: #333;
@@ -51,7 +54,7 @@
         }
 
         .tab.active {
-            background: linear-gradient(135deg,  #186b4a86, #5076af);
+            background: linear-gradient(135deg, #186b4a86, #5076af);
             color: white;
         }
 
@@ -60,22 +63,17 @@
         }
 
         .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            display: flex;
         }
 
         .image-container {
             position: relative;
-            overflow: hidden;
             margin: 0 auto;
-            display: block;
+            display: flex;
             max-width: 100%;
-            max-height:100%;
+            max-height: 100%;
             cursor: grab;
+            overflow: hidden;
         }
 
         .image-container:active {
@@ -94,7 +92,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+            display: flex;
             user-select: none;
             pointer-events: none;
         }
@@ -109,7 +107,7 @@
             z-index: 100;
         }
 
-        .zoom-btn {
+        .zoom-btn, .reset-btn {
             width: 20px;
             height: 20px;
             border: none;
@@ -126,36 +124,15 @@
             transition: all 0.3s ease;
         }
 
-        .zoom-btn:hover {
+        .zoom-btn:hover, .reset-btn:hover {
             background: white;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .reset-btn {
-            width: 20px;
-            height: 20px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            background: white;
-        }
-
         .hotspot {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 10px;
+            height: 10px;
             background: radial-gradient(circle, #ff6b6b, #ee5a24);
             border: 2px solid white;
             border-radius: 50%;
@@ -164,6 +141,7 @@
             opacity: 0.5;
             transition: all 0.3s ease;
         }
+
         .hotspot:hover {
             opacity: 1;
         }
@@ -190,11 +168,14 @@
         }
 
         .popup {
-            background: rgb(255, 255, 255);
-            padding: 10px;
+            background: white;
+            padding: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            max-width: 200px;
+            border:1px solid rgb(0, 0, 0);
+            max-width: 350px;
             width: 90%;
+            max-height: 200px;
+            overflow-y: scroll;
             transform: scale(0.8) translateY(20px);
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             backdrop-filter: blur(10px);
@@ -207,31 +188,37 @@
         }
 
         .popup h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 15px 0;
             color: #333;
-            font-size: 0.9em;
+            font-size: 1.2em;
             text-align: center;
+            font-weight: 600;
         }
 
         .popup p {
             margin: 0;
             color: #666;
-            line-height: 1.5;
-            text-align: center;
-            font-size:0.8em;
+            line-height: 1.6;
+            text-align: left;
+            font-size: 0.9em;
         }
 
         .popup .close-btn {
             position: absolute;
-            top: 0px;
-            right: 0px;
-            background: white;
+            top: 8px;
+            right: 12px;
+            background: none;
             border: none;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
             color: #999;
             font-weight: bold;
             transition: color 0.3s ease;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .popup .close-btn:hover {
@@ -240,12 +227,13 @@
 
         .instructions {
             background: rgba(142, 191, 220, 0.337);
-            padding: 10px;
+            padding: 15px;
             text-align: center;
         }
+
         .instructions p {
             color: #666;
-            font-size: 1.1em;
+            font-size: 1em;
             line-height: 1.6;
             margin: 0;
         }
@@ -253,7 +241,9 @@
     </style>
 </head>
 <body>
+
     <div class="container">
+
         <h1>Aqua Bio Murals</h1>
 
         <div class="tabs">
@@ -261,9 +251,10 @@
             <button class="tab" data-tab="mural2">Side B</button>
         </div>
 
-        <!-- Mural 1: Badger -->
+        <!-- Mural 1: Side A -->
         <div class="tab-content active" id="mural1">
             <div class="image-container" data-viewer="mural1">
+
                 <div class="zoom-controls">
                     <button class="zoom-btn zoom-in">+</button>
                     <button class="zoom-btn zoom-out">−</button>
@@ -273,48 +264,202 @@
                 <div class="image-wrapper">
                     <img class="mural-image" src="sidea.jpg" alt="Side A">
                     
+                    <!-- Birds in sky -->
+                    <!-- <div class="hotspot" style="left: 7%; top: 5%;" data-title="Bird 1" data-description="Description for bird 1"></div> -->
+                    <div class="hotspot" style="left: 17%; top: 5%;" data-title="Raven" data-description="Ravens are large black birds that are a part of the corvid family with crows, magpies, and blue 
+jays. They have lived in human settlements for thousands of years and their omnivorous and 
+opportunistic feeding patterns have led to an expansive range. Ravens are larger than crows and 
+have a heavier beak. While they are present throughout a variety of landscapes, they prefer 
+coastal regions for its easy access to food, nesting sites, and more temperate weather. Ravens 
+have a distinct croaky call and sometimes gather together to form a “crow-chestra”! They are 
+devoted to their families and engage in communal raising of young and feeding."></div>
+                    <!-- <div class="hotspot" style="left: 70%; top: 5%;" data-title="Raven" data-description="Description for bird 3"></div> -->
+                    <div class="hotspot" style="left: 80%; top: 5%;" data-title="Golden Eagle" data-description="The golden eagle is the most common eagle species seen across North America. Despite their 
+name, golden eagles are primarily dark brown with their namesake golden colouration only 
+present at the back of their heads. They commonly nest in wetlands due to an abundance of 
+prey, and ample vegetation. Golden eagles primarily eat small mammals such as hares, and 
+ground squirrels. They often go through periods of famine and then subsequent gorging when 
+they do find prey. Their “talon-ts” are a bit iffy! Only 1 out of 5 hunts is successful, but the odds 
+increase when breeding pairs team up. Approximately 4000 eagles pass through Alberta 
+annually which is the largest migration of golden eagles on earth."></div>
+                    <div class="hotspot" style="left: 90%; top: 5%;" data-title="Red-winged Black Bird" data-description="The red-winged blackbird is named for the distinctive slashes of red on the wings of male birds. 
+The males and females of the species look different. Female red-winged blackbirds are a dull 
+dark brown - definitely not as “eggs”-citing as their bright counterparts. This difference is called 
+“sexual-dimorphism.” Red-winged blackbirds are a common site in marshes and ponds 
+throughout North America where there is abundant food and nesting sites. They play an 
+important ecological role by controlling insect populations and also as prey for snakes, and small 
+mammals. Their presence indicates a healthy and productive wetland ecosystem making them a 
+good indicator species."></div>
+                    <div class="hotspot" style="left: 85%; top: 10%;" data-title="Bald Eagle" data-description="The bald eagle is a large bird of prey found throughout Canada and Alaska. While the bald eagle 
+is mostly an opportunistic feeder and will feed on rodents and other small mammals as it comes 
+upon them, they primarily eat fish and live near large bodies of water. Despite their names, bald 
+eagles are not bald - the feathers on top of their heads are white. They also do not make the 
+signature call they do in movies. They make a screeching sound while the cry they are given 
+actually belongs to the red-tailed hawk. They are highly “talon-ted” hunters and swoop down to 
+catch fish near the surface of the water. While for many years they faced extirpation, local 
+extinction in the United States, now populations have rebounded and they are considered 
+secure."></div>
 
-                    <!-- Birds in sky hotspots-->
-                    <!-- Hotspot 1: -->
-                    <div class="hotspot" style="left: 7%; top: 5%;" data-title="title" data-description="desc"></div>
-                    <!-- Hotspot 2: -->
-                    <div class="hotspot" style="left: 17%; top: 5%;" data-title="title" data-description="desc"></div>
-                    <!-- Hotspot 2: -->
-                    <div class="hotspot" style="left: 70%; top: 5%;" data-title="title" data-description="desc"></div>
-                    <!-- Hotspot 2: -->
-                    <div class="hotspot" style="left: 80%; top: 5%;" data-title="title" data-description="desc"></div>
-                    <!-- Hotspot 2: -->
-                    <div class="hotspot" style="left: 90%; top: 5%;" data-title="title" data-description="desc"></div>
-                    <!-- Hotspot 2: -->
-                    <div class="hotspot" style="left: 85%; top: 10%;" data-title="title" data-description="desc"></div>
+                    <!-- Animals on land and above surface -->
+                    <div class="hotspot" style="left: 7%; top: 30%;" data-title="American Badger" data-description="The American badger is a member of the mustelid family which includes wolverines, weasels, 
+and otters. While their bodies are dull brownish gray, their heads have a distinctive white stripe 
+down the forehead and between their eyes. American badgers are an aggressive animal, 
+commonly “badgering” mice, squirrels, and groundhogs as prey. Badgers primarily live in 
+grasslands where they can easily dig for prey and create burrows for cover, however, some also 
+live near marshes with looser soil. This digging behavior aerates the soil, cleaning out bacteria 
+that lives in airless, moist soil. This assists in nutrient turnover and creates habitats for other 
+animals and produces helpful bacteria for the water system."></div>
+                    <div class="hotspot" style="left: 12%; top: 40%;" data-title="Skunk" data-description="The North American skunk possess scent glands that they use to ward off predators by spraying. 
+Due to this, they have very few predators - mammals tend to avoid skunks unless starving. While 
+there are some variations, generally the striped skunk has a black body with a white stripe that 
+extends from the head down to the tail.  They look “scent”-sational! While skunks are primarily 
+insectivorous and use their sharp claws to dig in the soil for grubs and larvae, those that live 
+near wetlands and coastal areas have been known to eat fish and amphibians. They can also eat 
+poisonous beetles by rolling them around so they release all of their poison so they can eat."></div>
+                    <div class="hotspot" style="left: 25%; top: 40%;" data-title="Great Blue Heron" data-description="The great blue heron is the largest heron in North America and is commonly seen in wetlands 
+throughout Alberta. These birds are migratory and fly to the southern US during the winter. 
+Herons rarely wander far from wetlands and they nest in bushes and trees near the water's edge. 
+Herons primarily eat small fish but have been known to opportunistically prey on amphibians, 
+snakes, and even mice. They will wait in the water completely still for a fish to come by for their 
+snack. They swallow their prey whole and sometimes choke on them because of their long necks 
+- they definitely “egret” some of their actions!  Adult herons have few natural predators but their 
+eggs are preyed upon by other birds including ravens and hawks."></div>
+                    <div class="hotspot" style="left: 40%; top: 42%;" data-title="American White Pelican" data-description="American white pelicans are large aquatic birds that have distinctive beaks with a throat sac that 
+expands. The northernmost colony is found on the shores of Slave River between Alberta and 
+the Northwest Territories. These pelicans have an enormous appetite and eat up to 4 pounds of 
+food per day - they really rack up a huge “bill.” Unlike the heron, instead of diving for fish, 
+pelicans capture prey while swimming. Commonly eaten fish include the perch, rainbow trout, 
+and carp. Pelicans are colonial breeders, meaning pairs all gather at a single site and mate and 
+incubate their eggs together."></div>
+                    <div class="hotspot" style="left: 19%; top: 35%;" data-title="Cardinal" data-description="Cardinals are a perching songbird commonly seen in a variety of habitats throughout North 
+America. While males are the distinctive bright red associated with their species, females tend to 
+be more reddish olive in color. Cardinals primarily eat grains but the young are almost entirely 
+fed on insects. The Males are highly territorial and another male in their territory will have them 
+“seeing red”. Male cardinals defend their territories by local vocalizations and aggressively 
+flapping and pecking. Mates may stay together for several years but they are not necessarily 
+monogamous and can separate between seasons."></div>
+                    <div class="hotspot" style="left: 39%; top: 21%;" data-title="Sasquatch" data-description="The sasquatch, or bigfoot is a large, hairy ape-like mammal that some claim inhabits the forests 
+of North America. It is said that it stands above six feet in height and is covered in shaggy hair, 
+like a tall gorilla. They are claimed to be shy, but territorial and have a diet of berries and leaves. 
+Sasquatch's existence has never been proven making it a “cryptid” like the Loch Ness monster. 
+In history, gorillas were thought to be made up cryptids too. Legends of creatures resembling 
+sasquatch can be found across the world, like Yeti of the Himalayan Mountains, Australia’s 
+Yowie, and Scotland’s creatively named “Big-Grey-Man.” Bigfoot was once thought to be a man 
+or group of people living in the wild and not animals at all. Maybe a crazy man is running 
+around in the woods or is sasquatch an undiscovered ape species? Could there be any truth to 
+these claims?"></div>
+                    <div class="hotspot" style="left: 45%; top: 30%;" data-title="Tiger Salamander" data-description="Tiger salamanders are one of the largest land salamanders in North America; they have 
+distinctive dark yellow spots on a black body that gives them their name. These salamanders 
+commonly eat small insects, snails, and slugs but when they don’t get enough “newt-trition” are 
+commonly known to cannibalize each other! While the adults are terrestrial- live on the land, 
+wetlands provide ideal breeding locations due to loose soil for them to burrow and ample prey. 
+The larvae (a salamander tadpole) are fully aquatic and have large external gills. Like other 
+amphibians, tiger salamanders are a good indicator for the health of an ecosystem because they 
+are so sensitive to pollution."> </div>
+                    <div class="hotspot" style="left: 40%; top: 31%;" data-title="White-tailed Jackrabbit / Prairie Hare" data-description="The prairie hare is a species of hare common in suburban parks in Western Canada; they are 
+easily distinguished by their identifying white tails and black tipped ears. During the winter, 
+white-tailed hares have a lighter white coat that allows them to blend into the surroundings. 
+This coat darkens to a dull brown in the summer. This camouflage is called “cryptic colouration” 
+and allows them to avoid predators such as coyotes and wolves.  White-tailed rabbits are a 
+solitary species and primarily feed on grasses and other green plants. Their food can be so low in 
+nutrients that they will eat their own droppings for a chance to digest more vitamins that are 
+more accessible after one round of digestion. They are nocturnal and only emerge at dusk to 
+feed."></div>
+                    <div class="hotspot" style="left: 50%; top: 32%;" data-title="Beaver" data-description="Beavers are the largest rodents in North America and have a body well suited for their semi-aquatic lifestyle. This includes a paddle-like tail it uses like a rudder and webbed hind feet
+for swimming. Beavers also have a double coat of fur which keeps them warm and they can
+produce a waterproof substance called “castoreum” which keeps them warm in cold Canadian
+waters. Like all rodents, the front teeth of beavers never stop growing, helping with their
+“gnawing” passion for building dams. Chewing logs and building dams helps wear their teeth
+down, like how we clip our fingernails."></div>
+                    <div class="hotspot" style="left: 50%; top: 25%;" data-title="Beaver Dam" data-description="Beavers are more vulnerable to predators on land than in the water and so beaver lodges 
+function as underwater safe zones. A beaver dam is built to create a deep pond that protects 
+beavers against predators that cannot swim and holds their food during the winter. Dams result 
+in dramatic changes to the environment. Dams and ponds can provide nurseries for salmon and 
+trout as deep habitats where young fish are also protected from birds. Likewise, dams can 
+provide shelter to young frogs and toads. Beavers are a “dam” good friend to have if you live 
+lakeside! The dam is not where the beaver lives. The dam ensures a body of water is deep 
+enough for their lodge. A beaver lodge is a separate structure deep in the water where beavers 
+are safe and cozy. "></div>
+                    <div class="hotspot" style="left: 53%; top: 50%;" data-title="River Otter" data-description="The river otter is a member of the weasel family that lives exclusively in North America. Otters 
+create a burrow near the water’s edge where they live and raise their young. They primarily eat 
+fish, most commonly perch, suckers, and catfish and are able to break into beaver lodges. Since 
+they dive and swim underwater for long periods of time, otters have see-through eyelids called 
+“nictitating membranes.” These eyelids keep their eyes protected underwater. Otters are also 
+well known for their play - wrestling and chasing each other around waterways - this helps 
+develop hunting skills and is “otter-ly” adorable!"></div>
+                    <!-- <div class="hotspot" style="left: 59%; top: 30%;" data-title="Crow" data-description="Description for crow"></div> -->
+                    <div class="hotspot" style="left: 60%; top: 35%;" data-title="Pocket Gopher" data-description="Pocket gophers are small burrowing rodents found throughout the prairies. Most gophers are 
+brown with fur that matches the soil they live near - this allows them to camouflage and hide 
+from predators such as weasels, snakes, and hawks. The “pocket” in their names comes from 
+their large cheek pouches  which extend all the way back to their shoulders. They really “gopher” 
+all the food in one bite! They are commonly viewed as pests since they destroy farms and 
+gardens by creating an extensive tunnel system to live in while hoarding vegetables, fruits, and 
+roots.  Gophers generally avoid waterways due to the possibility of their tunnels flooding but 
+some burrows have chambers that control the amount of groundwater and rain that enters."></div>
+                    <div class="hotspot" style="left: 65%; top: 35%;" data-title="Bluejay" data-description="The bluejay is a small bright blue bird from the same family as crows and ravens. Bluejays feed 
+on nuts and grains, invertebrates, and soft fruits. They sometimes “cache” food, meaning they 
+store food for eating later. These birds are very aggressive to other birds and sometimes even 
+decapitate them; they have also been known to scream and chase away other birds of prey such 
+as hawks and eagles. Like other corvids, they are highly intelligent and have been shown to use 
+tools in captivity. Blue jays mate for life and produce one clutch of eggs annually."></div>
+                    <div class="hotspot" style="left: 65%; top: 30%;" data-title="Grizzly Bear" data-description="Grizzly bears are a subspecies of the brown bear found in North America. The largest populations occur around Alaska, but they are common in Alberta and British Columbia. Grizzlies gather around flowing rivers to catch salmon traveling inland from the ocean. Many might gather together where rivers are shallow to catch bass and trout too. Oftentimes, they only eat the skin, brain, and belly of these fish leaving the rest on shore. This provides food for foxes, gulls, and ravens and ensures nutrients are spread throughout the food chain so everyone gets a snack. How 'beary' nice of them! Grizzlies have the lowest reproduction rate of any mammals in North America, meaning they are slow to parent their young. Mother bears give birth during the winter, and will parent her cubs for around two years."></div>
+                    <div class="hotspot" style="left: 70%; top: 42%;" data-title="Mallard" data-description="Mallards are a dabbling duck species that are common in urban parks, lakes, and are seen in 
+human-made water features. Dabbling ducks feed mainly at the surface of water instead of 
+diving underwater. They will swim with their tails in the air while they grab food with their 
+beaks. Females generally have brown speckled feathers while males have distinctive iridescent 
+green heads.  Due to their calm nature - they are never in a “fowl” mood - mallards are tolerated 
+by humans and pose a risk as an invasive species to native duck species. Mallards have many 
+predators and sleep with one eye open allowing them to always be on the lookout!"></div>
+                    <div class="hotspot" style="left: 85%; top: 40%;" data-title="Common Loon" data-description="Loons, also called divers, are medium sized black and gray birds that are famous for their call. 
+They are also expert fish chasers. These birds catch and swallow their prey underwater after 
+diving up to 60m! Fish account for about 80% of their diet and include common Alberta fish 
+such as northern pike, burbot, and walleye. Over 30 weeks a family of two adults and 2 chicks 
+can eat a literal tonne of fish!  Loons are monogamous and couples stay together for over a 
+decade raising new clutches every year. They are the provincial bird of Ontario and appear on 
+the Canadian one dollar coin - that we often call the “loonie” instead."></div>
+                    <div class="hotspot" style="left: 83%; top: 26%;" data-title="Porcupine" data-description="Porcupines are a quill covered rodent that are usually black or dark brown with white highlights. 
+This distinctive coloration allows them to warn other animals from getting too close - much like 
+skunks - they want to “stick” out! Due to these quills, porcupines have few predators and many 
+porcupines live until 30 years old. In addition to defense, quills also insulate their bodies during 
+the winter. Porcupines are herbivores and commonly climb trees to eat tender buds and shoots. 
+They often fall out of these trees as well and get hurt on their own quills! However, their skin 
+contains natural antibiotics that prevent them from getting infections when they poke 
+themselves or another porcupine. Look out below!"></div>
+                    <div class="hotspot" style="left: 80%; top: 21%;" data-title="Wild Boar" data-description="In Alberta wild boars refer to both the Eurasian wild boar and domestic pigs that have escaped 
+the farm. Pigs have their babies fast, and the piglets of wild parents look more like boars than 
+farm pigs. In a few generations they are hard to tell apart from wild boars. They really go 
+hog-wild! Boars are highly intelligent, and are omnivorous, meaning they eat EVERYTHING! 
+They will eat grasses, roots, insects, rotten fruit, and other animals. Their smarts and ‘pig-out’ 
+diet allows them to survive in many environments, which has displaced certain native animals 
+across the planet. They are destructive to birds that nest on the ground, amphibians, reptiles, 
+and consume all the food sources other animals rely on causing disruptions to the food-chain. 
+Keep your pigs penned up!"></div>
+                    <div class="hotspot" style="left: 72%; top: 20%;" data-title="Coyote" data-description="Coyotes are small dog-like animals common in many urban and rural regions across North 
+America. Coyotes are opportunistic feeders and have been known to hunt prey including the 
+prairie hare and deer but also rummage through garbage and eat dead meat. They are one of the 
+largest threats to livestock across Canada and have been caught red handed for 2.2% of sheep 
+losses in the US. While they typically avoid swimming unless necessary, they are capable of 
+crossing rivers and other bodies of water when necessary to find food, mates, or suitable habitat. 
+Coyotes don’t usually form permanent packs and will often travel in pairs. They may form small 
+groups made of coyote couples which disperse after a hunt."></div>
 
-                    <!-- fish in the water-->
-                    <!-- blue fish -->
-                    <div class="hotspot" style="left: 14%; top: 60%;" data-title="blue fish" data-description="desc"></div>
-                    <!-- green fish -->
-                    <div class="hotspot" style="left: 14%; top: 72%;" data-title="green fish" data-description="desc"></div>
-                    <!-- orange fish -->
-                    <div class="hotspot" style="left: 10%; top: 85%;" data-title="orange fish" data-description="desc"></div>
-                    <!-- lobster -->
-                    <div class="hotspot" style="left: 19%; top: 83%;" data-title="lobster" data-description="desc"></div>
-                    <!-- turtle -->
-                    <div class="hotspot" style="left: 22%; top: 55%;" data-title="turtle" data-description="desc"></div>
-                    <!-- teal fish -->
-                    <div class="hotspot" style="left: 32%; top: 70%;" data-title="teal fish" data-description="desc"></div>
-                    <!-- two fin fish grey and yellow -->
-                    <div class="hotspot" style="left: 55%; top: 60%;" data-title="two fin fish grey and yellow" data-description="desc"></div>
-                    <!-- sturgeon -->
-                    <div class="hotspot" style="left: 85%; top: 60%;" data-title="sturgeon" data-description="desc"></div>
-                    <!-- goldfish -->
-                    <div class="hotspot" style="left: 90%; top: 57%;" data-title="goldfish" data-description="desc"></div>
-                    <!-- lime fish -->
-                    <div class="hotspot" style="left: 90%; top: 80%;" data-title="goldfish" data-description="desc"></div>
-                    
+
+                    <!-- Fish in water -->
+                    <div class="hotspot" style="left: 14%; top: 60%;" data-title="Blue Fish" data-description="Description for blue fish"></div>
+                    <div class="hotspot" style="left: 14%; top: 72%;" data-title="Green Fish" data-description="Description for green fish"></div>
+                    <div class="hotspot" style="left: 10%; top: 85%;" data-title="Orange Fish" data-description="Description for orange fish"></div>
+                    <div class="hotspot" style="left: 19%; top: 83%;" data-title="Lobster" data-description="Description for lobster"></div>
+                    <div class="hotspot" style="left: 22%; top: 55%;" data-title="Turtle" data-description="Description for turtle"></div>
+                    <div class="hotspot" style="left: 32%; top: 70%;" data-title="Teal Fish" data-description="Description for teal fish"></div>
+                    <div class="hotspot" style="left: 55%; top: 60%;" data-title="Two-Fin Fish" data-description="Description for two-fin fish"></div>
+                    <div class="hotspot" style="left: 85%; top: 60%;" data-title="Sturgeon" data-description="Description for sturgeon"></div>
+                    <div class="hotspot" style="left: 90%; top: 57%;" data-title="Goldfish" data-description="Description for goldfish"></div>
+                    <div class="hotspot" style="left: 90%; top: 80%;" data-title="Lime Fish" data-description="Description for lime fish"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Mural 2: Marine Life -->
+        <!-- Mural 2: Side B -->
         <div class="tab-content" id="mural2">
             <div class="image-container" data-viewer="mural2">
                 <div class="zoom-controls">
@@ -326,54 +471,21 @@
                 <div class="image-wrapper">
                     <img class="mural-image" src="sideb.jpg" alt="Side B">
                     
-
-                    <!-- sturgeon -->
-                    <div class="hotspot" style="left: 25%; top: 60%;" data-title="title" data-description="desc"></div>
-                    <!-- goldfish -->
-                    <div class="hotspot" style="left: 80%; top: 65%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-                    <!--  -->
-                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="title" data-description="desc"></div>
-
+                    <div class="hotspot" style="left: 25%; top: 60%;" data-title="Sturgeon" data-description="Description for sturgeon"></div>
+                    <div class="hotspot" style="left: 80%; top: 65%;" data-title="Goldfish" data-description="Description for goldfish"></div>
+                    <div class="hotspot" style="left: 30%; top: 30%;" data-title="Marine Life 1" data-description="Description for marine life 1"></div>
+                    <div class="hotspot" style="left: 50%; top: 45%;" data-title="Marine Life 2" data-description="Description for marine life 2"></div>
+                    <div class="hotspot" style="left: 70%; top: 35%;" data-title="Marine Life 3" data-description="Description for marine life 3"></div>
                 </div>
             </div>
         </div>
-                <div class="instructions">
-            <p>Click on the glowing hotspots to discover interesting facts! Use the zoom controls to get a closer look, and drag to pan around.</p>
+
+        <div class="instructions">
+            <p>Click on the hotspots to discover interesting facts! Use the zoom controls to get a closer look, and drag to pan around.</p>
         </div>
     </div>
 
     <script>
-
         class TabbedMuralViewer {
             constructor() {
                 this.viewers = new Map();
@@ -382,10 +494,7 @@
             }
             
             init() {
-                // Initialize tab functionality
                 this.initTabs();
-                
-                // Initialize viewers for each mural
                 this.initViewers();
             }
             
@@ -456,64 +565,66 @@
             }
             
             init() {
-                // Zoom controls
+                this.initZoomControls();
+                this.initPanControls();
+                this.initHotspots();
+                this.initPopupControls();
+            }
+            
+            initZoomControls() {
                 this.zoomInBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     this.zoomIn();
                 });
+                
                 this.zoomOutBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     this.zoomOut();
                 });
+                
                 this.resetBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     this.resetView();
                 });
-                                
-                // Add touch events for zoom controls
+                
+                // Touch events
                 this.zoomInBtn.addEventListener('touchend', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     this.zoomIn();
                 });
+                
                 this.zoomOutBtn.addEventListener('touchend', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     this.zoomOut();
                 });
+                
                 this.resetBtn.addEventListener('touchend', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     this.resetView();
                 });
                 
-                // Mouse events for panning
+
+            }
+            
+            initPanControls() {
+                // Mouse events
                 this.imageContainer.addEventListener('mousedown', (e) => this.startDrag(e));
                 this.imageContainer.addEventListener('mousemove', (e) => this.drag(e));
                 this.imageContainer.addEventListener('mouseup', () => this.endDrag());
                 this.imageContainer.addEventListener('mouseleave', () => this.endDrag());
                 
-                // Touch events for mobile
-                // { passive: false } to ensure preventDefault works correctly
-                this.imageContainer.addEventListener('touchstart', (e) => this.startDrag(e), { passive: false});
+                // Touch events
+                this.imageContainer.addEventListener('touchstart', (e) => this.startDrag(e), { passive: false });
                 this.imageContainer.addEventListener('touchmove', (e) => this.drag(e), { passive: false });
                 this.imageContainer.addEventListener('touchend', () => this.endDrag());
-                
-                // Wheel zoom
-                this.imageContainer.addEventListener('wheel', (e) => this.handleWheel(e));
-                
-                // Hotspot events
-                this.initHotspots();
-                
-                // Close popup events
-                document.addEventListener('click', (e) => this.handleOutsideClick(e));
-                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
             }
             
             initHotspots() {
                 const hotspots = this.imageContainer.querySelectorAll('.hotspot');
                 hotspots.forEach(hotspot => {
-                    // Use both click and touchend for better mobile compatibility
                     hotspot.addEventListener('click', (e) => {
                         e.stopPropagation();
                         this.showPopup(hotspot);
@@ -525,6 +636,11 @@
                         this.showPopup(hotspot);
                     });
                 });
+            }
+            
+            initPopupControls() {
+                document.addEventListener('click', (e) => this.handleOutsideClick(e));
+                document.addEventListener('keydown', (e) => this.handleKeyDown(e));
             }
             
             zoomIn() {
@@ -564,9 +680,7 @@
             }
             
             startDrag(e) {
-                // Prevent default touch behaviors that might interfere
                 e.preventDefault();
-                
                 this.isDragging = true;
                 this.imageContainer.style.cursor = 'grabbing';
                 
@@ -581,7 +695,6 @@
             
             drag(e) {
                 if (!this.isDragging) return;
-                // Prevent default touch behaviors
                 e.preventDefault();
                 
                 const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
@@ -604,34 +717,33 @@
             
             constrainPosition() {
                 const containerRect = this.imageContainer.getBoundingClientRect();
-                // When zoomed, constrain to keep image content visible
                 const maxTranslateX = (containerRect.width * (this.scale - 1)) / 2;
                 const maxTranslateY = (containerRect.height * (this.scale - 1)) / 2;
                 
                 this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
                 this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
+                
                 this.updateTransform();
             }
             
             updateTransform() {
                 this.imageWrapper.style.transform = `scale(${this.scale}) translate(${this.translateX / this.scale}px, ${this.translateY / this.scale}px)`;
+                
                 const hotspots = this.imageContainer.querySelectorAll('.hotspot');
                 hotspots.forEach(hotspot => {
                     hotspot.style.transform = `translate(-50%, -50%) scale(${1 / this.scale})`;
                 });
             }
             
-             showPopup(hotspot) {
+            showPopup(hotspot) {
                 this.closePopup();
                 
                 const title = hotspot.getAttribute('data-title');
                 const description = hotspot.getAttribute('data-description');
                 
-                // Create overlay
                 const overlay = document.createElement('div');
                 overlay.className = 'popup-overlay';
                 
-                // Create popup
                 const popup = document.createElement('div');
                 popup.className = 'popup';
                 popup.innerHTML = `
@@ -644,37 +756,35 @@
                 this.imageContainer.appendChild(overlay);
                 this.activePopup = overlay;
                 
-                // Show popup with animation
                 setTimeout(() => overlay.classList.add('show'), 10);
-                
-                // Close button functionality
-                popup.querySelector('.close-btn').addEventListener('click', (e) => {
+
+                // Close button events
+                const closeBtn = popup.querySelector('.close-btn');
+                closeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.closePopup();
                 });
                 
-                // Close on overlay click
+                closeBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.closePopup();
+                });
+                
+                // Overlay click events
                 overlay.addEventListener('click', (e) => {
                     if (e.target === overlay) {
                         this.closePopup();
                     }
                 });
-
-
-                // Close button functionality for mobile
-                popup.querySelector('.close-btn').addEventListener('touchend', (e) => {
-                    e.stopPropagation();
-                    this.closePopup();
-                });
                 
-                // Close on overlay click for mobile
                 overlay.addEventListener('touchend', (e) => {
                     if (e.target === overlay) {
                         this.closePopup();
                     }
                 });
-
             }
+            
             closePopup() {
                 if (this.activePopup) {
                     this.activePopup.classList.remove('show');
@@ -686,11 +796,16 @@
                     }, 300);
                 }
             }
+            
             handleOutsideClick(e) {
-                if (!e.target.closest('.popup') && !e.target.closest('.hotspot') && !e.target.closest('.zoom-controls') && !e.target.closest('.popup-overlay')) {
+                if (!e.target.closest('.popup') && 
+                    !e.target.closest('.hotspot') && 
+                    !e.target.closest('.zoom-controls') && 
+                    !e.target.closest('.popup-overlay')) {
                     this.closePopup();
                 }
             }
+            
             handleKeyDown(e) {
                 if (e.key === 'Escape') {
                     this.closePopup();
@@ -698,11 +813,10 @@
             }
         }
         
-        // initialize tabs when page is loaded
+        // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             new TabbedMuralViewer();
         });
-
     </script>
 </body>
 </html>
