@@ -225,6 +225,7 @@
             color: #333;
         }
 
+
         .instructions {
             background: rgba(142, 191, 220, 0.337);
             padding: 15px;
@@ -425,7 +426,7 @@ porcupines live until 30 years old. In addition to defense, quills also insulate
 the winter. Porcupines are herbivores and commonly climb trees to eat tender buds and shoots. 
 They often fall out of these trees as well and get hurt on their own quills! However, their skin 
 contains natural antibiotics that prevent them from getting infections when they poke 
-themselves or another porcupine. Look out below!"></div>
+themselves or another porcupine. Look out below!" data-video="https://www.youtube.com/embed/cILZ_cB3_so"></div>
                     <div class="hotspot" style="left: 80%; top: 21%;" data-title="Wild Boar" data-description="In Alberta wild boars refer to both the Eurasian wild boar and domestic pigs that have escaped 
 the farm. Pigs have their babies fast, and the piglets of wild parents look more like boars than 
 farm pigs. In a few generations they are hard to tell apart from wild boars. They really go 
@@ -809,6 +810,8 @@ burbot is edible, and tasty! In Finland it is considered a delicacy."></div>
                 
                 const title = hotspot.getAttribute('data-title');
                 const description = hotspot.getAttribute('data-description');
+                const audioSrc = hotspot.getAttribute('data-audio');
+                const videoSrc = hotspot.getAttribute('data-video');
                 
                 const overlay = document.createElement('div');
                 overlay.className = 'popup-overlay';
@@ -819,11 +822,18 @@ burbot is edible, and tasty! In Finland it is considered a delicacy."></div>
                     <button class="close-btn">&times;</button>
                     <h3>${title}</h3>
                     <p>${description}</p>
+                    ${videoSrc ? `
+                        <div class="video-container" style="margin-top: 15px;">
+                            <iframe width="100%" height="200" src="${videoSrc}" frameborder="0" allowfullscreen style="border-radius: 5px;"></iframe>
+                        </div>
+                    ` : ''}
                 `;
                 
                 overlay.appendChild(popup);
                 this.imageContainer.appendChild(overlay);
                 this.activePopup = overlay;
+
+                
                 
                 setTimeout(() => overlay.classList.add('show'), 10);
 
@@ -852,6 +862,94 @@ burbot is edible, and tasty! In Finland it is considered a delicacy."></div>
                         this.closePopup();
                     }
                 });
+            }
+
+            playAudio(audioSrc) {
+                const mediaOverlay = document.createElement('div');
+                mediaOverlay.className = 'media-overlay';
+                
+                const mediaContent = document.createElement('div');
+                mediaContent.className = 'media-content';
+                mediaContent.innerHTML = `
+                    <button class="media-close">&times;</button>
+                    <h3>Audio</h3>
+                    <audio controls autoplay>
+                        <source src="${audioSrc}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                `;
+                
+                mediaOverlay.appendChild(mediaContent);
+                document.body.appendChild(mediaOverlay);
+                
+                setTimeout(() => mediaOverlay.classList.add('show'), 10);
+                
+                // Close events
+                const closeBtn = mediaContent.querySelector('.media-close');
+                closeBtn.addEventListener('click', () => this.closeMedia(mediaOverlay));
+                
+                mediaOverlay.addEventListener('click', (e) => {
+                    if (e.target === mediaOverlay) {
+                        this.closeMedia(mediaOverlay);
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeMedia(mediaOverlay);
+                    }
+                });
+            }
+
+            playVideo(videoSrc) {
+                const mediaOverlay = document.createElement('div');
+                mediaOverlay.className = 'media-overlay';
+                
+                const mediaContent = document.createElement('div');
+                mediaContent.className = 'media-content';
+                mediaContent.innerHTML = `
+                    <button class="media-close">&times;</button>
+                    <video controls autoplay>
+                        <source src="${videoSrc}" type="video/mp4">
+                        Your browser does not support the video element.
+                    </video>
+                `;
+                
+                mediaOverlay.appendChild(mediaContent);
+                document.body.appendChild(mediaOverlay);
+                
+                setTimeout(() => mediaOverlay.classList.add('show'), 10);
+                
+                // Close events
+                const closeBtn = mediaContent.querySelector('.media-close');
+                closeBtn.addEventListener('click', () => this.closeMedia(mediaOverlay));
+                
+                mediaOverlay.addEventListener('click', (e) => {
+                    if (e.target === mediaOverlay) {
+                        this.closeMedia(mediaOverlay);
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeMedia(mediaOverlay);
+                    }
+                });
+            }
+
+            closeMedia(mediaOverlay) {
+                const audio = mediaOverlay.querySelector('audio');
+                const video = mediaOverlay.querySelector('video');
+                
+                if (audio) audio.pause();
+                if (video) video.pause();
+                
+                mediaOverlay.classList.remove('show');
+                setTimeout(() => {
+                    if (mediaOverlay.parentNode) {
+                        mediaOverlay.remove();
+                    }
+                }, 300);
             }
             
             closePopup() {
